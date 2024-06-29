@@ -9,24 +9,11 @@ endif
 dest_dir := $(shell pwd)
 
 
-all: systemc
-
-systemc: configure
-	mkdir -p systemc
-	cd temp/systemc/objdir && \
-	cmake -DCMAKE_INSTALL_PREFIX="$(dest_dir)" -DCMAKE_CXX_STANDARD=14  .. && \
-	make -j$$(nproc) 2> ../../../install.log && \
-	make install
-	rm -rf temp
-
-configure: temp
-	cd temp/systemc && \
-	mkdir -p objdir
-
-temp:
-	mkdir -p temp
-	cd temp && git clone --depth 1 --branch 2.3.4 https://github.com/accellera-official/systemc.git
-
-clean:
-	rm -rf systemc
-	rm -rf temp
+all: 
+	mkdir -p temp && \
+	cd temp && \
+	git clone --depth 1 --branch 2.3.4 https://github.com/accellera-official/systemc.git && \
+	mkdir -p objdir && \
+	cmake -DCMAKE_INSTALL_PREFIX="$(dest_dir)" -DCMAKE_CXX_STANDARD=14  ./systemc && \
+	make install && \
+	rm -rf ../temp
